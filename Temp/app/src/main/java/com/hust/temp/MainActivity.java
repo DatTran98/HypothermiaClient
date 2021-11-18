@@ -2,51 +2,39 @@ package com.hust.temp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.RequiresApi;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hust.temp.Common.Constant;
-import com.hust.temp.entities.Student;
 import com.hust.temp.sevicesretrofit.GetDataListener;
 import com.hust.temp.entities.StudentInfo;
 import com.hust.temp.sevicesretrofit.GetListStudentsApiIml;
 import com.hust.temp.ui.main.SectionsPagerAdapter;
 
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
-    //    private SwipeRefreshLayout swipeContainer;
     private FloatingActionButton fab,btnExport;
     private TextView txtTitle;
     private ArrayList<StudentInfo> listStudentInfoSource = new ArrayList<>();
@@ -106,25 +94,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//
-//                // To keep animation for 4 seconds
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // Stop animation (This will be after 3 seconds)
-//                        swipeContainer.setRefreshing(false);
-//                    }
-//                }, 4000); //
-//            }
-//        });
-//        // Configure the refreshing colors
-//        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
     }
 
     private void getData() {
@@ -153,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
         txtTitle = findViewById(R.id.title);
         fab = findViewById(R.id.fab);
         btnExport = findViewById(R.id.btn_export);
-//        swipeContainer = findViewById(R.id.swipeContainer);
     }
 
     @Override
@@ -198,31 +166,17 @@ public class MainActivity extends AppCompatActivity {
                 data.append(Constant.NEW_LINE_SEPARATOR);
                 index++;
             }
+            File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             // Open Stream to write file.
-            FileOutputStream out = this.openFileOutput("simpleFileName.csv", MODE_PRIVATE);
-            // Write.
+            File dir = new File (root.getAbsolutePath());
+            dir.mkdirs();
+            File file = new File(dir, Constant.FILE_NAME);
+            FileOutputStream out = new FileOutputStream(file);
             out.write(data.toString().getBytes(StandardCharsets.UTF_8));
             out.close();
-            Toast.makeText(this, "OKKK", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.export_success)+dir, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(this, "NOOO" + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-    class GetListStudent extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] params) {
-            exportCSV();
-            return null;
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading = ProgressDialog.show(MainActivity.this, getResources().getString(R.string.loading_data), getResources().getString(R.string.export), false, false);
-        }
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            loading.dismiss();
+            Toast.makeText(this, getResources().getString(R.string.export_failed)+ e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -25,7 +25,7 @@ public class Constant {
     public static final String URL_ADD_STUDENT = "/tempproject/add_student_api.php";
     public static final String COMMA_DELIMITER = ",";
     public static final String NEW_LINE_SEPARATOR = "\n";
-    public static final String FILE_NAME_EXTENSION = ".csv";
     public static final String FILE_HEADER = "Mã học sinh,Tên,Lớp,Ngày sinh,Thân nhiệt,Ngày cập nhật";
     public static final String STATUS = "status";
+    public static final String FILE_NAME = "export_student.csv";
 }
