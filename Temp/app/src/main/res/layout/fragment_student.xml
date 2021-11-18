@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:id="@+id/filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+        <TextView
+            android:id="@+id/txt_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lọc theo tên"
+            />
+        <TextView
+            android:layout_alignEnd="@id/btn_filter"
+            android:layout_marginEnd="@dimen/m_25"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lb_filter"
+            />
+        <ImageButton
+            android:id="@+id/btn_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_filter_alt_24"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
+    <ListView
+        android:id="@+id/listStudents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
+
+        <TableLayout
+            android:id="@+id/tbl_student_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:layout_below="@id/filter"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin">
+
+            <!-- Table Heading -->
+
+            <TableRow
+                android:background="@color/text_main_color">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbId"
+                    android:textColor="@android:color/white"
+                    android:padding="@dimen/p_5"
+                    android:textSize="14sp"
+                    android:layout_weight="2"
+                    android:gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_name"
+                    android:textColor="@android:color/white"
+                    android:padding="@dimen/p_5"
+                    android:textSize="14sp"
+                    android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_class"
+                    android:textColor="@android:color/white"
+                    android:padding="@dimen/p_5"
+                    android:textSize="14sp"
+                    android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lb_birthday"
+                    android:textColor="@android:color/white"
+                    android:padding="@dimen/p_5"
+                    android:textSize="14sp"
+                    android:layout_weight="4"
+                    android:gravity="center_horizontal"
+                    />
+
+            </TableRow>
+        </TableLayout>
+            <!-- Table Data -->
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll_view"
+                android:layout_below="@+id/tbl_student_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               >
+                <TableLayout
+                    android:id="@+id/tbl_student"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin">
+
+<!--            <TableRow>-->
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="122"-->
+<!--                    android:padding="@dimen/p_5"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:gravity="center_horizontal"-->
+<!--                    />-->
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Phan tiến"-->
+<!--                    android:padding="@dimen/p_5"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_weight="4"-->
+<!--                    android:gravity="center_horizontal"-->
+<!--                    />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="10A"-->
+<!--                    android:padding="@dimen/p_5"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_weight="4"-->
+<!--                    android:gravity="center_horizontal"-->
+<!--                    />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="12/12/2021"-->
+<!--                    android:padding="@dimen/p_5"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:layout_weight="4"-->
+<!--                    android:gravity="center_horizontal"-->
+<!--                    />-->
+
+<!--            </TableRow>-->
+
+        </TableLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardBackgroundColor="@color/whiteTextColor"
+    android:focusableInTouchMode="true"
+    android:gravity="center"
+    android:layout_alignParentTop="true"
+    android:padding="@dimen/p_5"
+    app:cardCornerRadius="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/titleDialog"
+                style="@style/modifiedEditText"
+                android:layout_marginTop="@dimen/loginViewsMargin"
+                android:text="@string/sort_by_temp">
+
+            </com.google.android.material.textview.MaterialTextView>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputId"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin">
+
+                <EditText
+                    android:id="@+id/txt_name"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/lb_name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputName"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin">
+
+                <EditText
+                    android:id="@+id/txt_class"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/lb_class"
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputTempFrom"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin">
+
+                <EditText
+                    android:id="@+id/txt_temp_from"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/temp_from"
+                    android:inputType="number"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputTempTo"
+                style="@style/parent"
+                android:layout_marginTop="@dimen/loginViewsMargin">
+
+                <EditText
+                    android:id="@+id/txt_temp_to"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/temp_to"
+                    android:inputType="number"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textSearchDate"
+                style="@style/parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/editTextDate"
+                    style="@style/modifiedEditText"
+                    android:hint="@string/lb_choose_date"
+                    android:maxLines="1" />
+                <ImageButton
+                    android:id="@+id/btn_pick_date_dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/loginViewsMargin"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="@dimen/m_25"
+                    android:layout_alignBaseline="@+id/editTextDate"
+                    android:background="@drawable/ic_baseline_date_range_24" />
+                </RelativeLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/textInputSortByTemp"-->
+<!--                style="@style/modifiedEditText"-->
+<!--                android:layout_marginTop="@dimen/loginViewsMargin"-->
+<!--                android:text="@string/sort_by_temp">-->
+
+<!--            </com.google.android.material.textview.MaterialTextView>-->
+<!--            <RadioGroup-->
+<!--                android:id="@+id/radio_group_temp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/sort_by_temp_increase"-->
+<!--                    style="@style/modifiedEditText"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/loginViewsMargin"-->
+<!--                    android:checked="true"-->
+<!--                    android:text="@string/increase" />-->
+
+<!--                <RadioButton-->
+<!--                    android:id="@+id/sort_by_temp_decrease"-->
+<!--                    style="@style/modifiedEditText"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/loginViewsMargin"-->
+<!--                    android:checked="false"-->
+<!--                    android:text="@string/decrease" />-->
+
+<!--            </RadioGroup>-->
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textInputSortByDate"
+                style="@style/modifiedEditText"
+                android:layout_marginTop="@dimen/loginViewsMargin"
+                android:text="@string/sort_by_date">
+
+            </com.google.android.material.textview.MaterialTextView>
+
+            <RadioGroup
+                android:id="@+id/radio_group_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/sort_by_date_increase"
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/loginViewsMargin"
+                    android:checked="true"
+                    android:text="@string/increase" />
+
+                <RadioButton
+                    android:id="@+id/sort_by_date_decrease"
+                    style="@style/modifiedEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/loginViewsMargin"
+                    android:checked="false"
+                    android:text="@string/decrease" />
+
+            </RadioGroup>
+
+            <!--                    <com.google.android.material.textfield.TextInputLayout-->
+            <!--                        android:id="@+id/textInputPassword"-->
+            <!--                        style="@style/parent"-->
+            <!--                        android:layout_marginTop="@dimen/loginViewsMargin">-->
+            <!--                        <EditText-->
+            <!--                            android:id="@+id/editTextPassword"-->
+            <!--                            style="@style/modifiedEditText"-->
+            <!--                            android:hint="@string/login_password_hint"-->
+            <!--                            android:inputType="textPassword"-->
+            <!--                            android:maxLines="1" />-->
+            <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+            <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                android:id="@+id/btnSearch"
+                style="@style/loginButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/m_25"
+                android:text="@string/search"
+                app:spinning_bar_color="#FFF"
+                app:spinning_bar_padding="6dp"
+                app:spinning_bar_width="4dp"
+                android:layout_marginBottom="@dimen/m_25"
+                />
+        </LinearLayout>
+    </ScrollView>
+</androidx.cardview.widget.CardView>
