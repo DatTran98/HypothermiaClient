@@ -210,19 +210,6 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
 
         }
 
-//        if (sortTempIncrease) {
-//            filterSortedStudentInfo = (ArrayList<StudentInfo>) filterSortedStudentInfo.stream()
-//                    .sorted(Comparator.comparing(StudentInfo::getHypothermia))
-//                    .collect(Collectors.toList());
-//            textFilter += getResources().getString(R.string.sort_temp_increase);
-//        }
-//        if (sortTempDecrease) {
-//            filterSortedStudentInfo = (ArrayList<StudentInfo>) filterSortedStudentInfo.stream()
-//                    .sorted(Comparator.comparing(StudentInfo::getHypothermia))
-//                    .collect(Collectors.toList());
-//            Collections.reverse(filterSortedStudentInfo);
-//            textFilter += getResources().getString(R.string.sort_temp_decrease);
-//        }
         if (sortDateIncrease) {
             filterSortedStudentInfo = (ArrayList<StudentInfo>) filterSortedStudentInfo.stream()
                     .sorted(Comparator.comparing(StudentInfo::getLastUpdatedDate))

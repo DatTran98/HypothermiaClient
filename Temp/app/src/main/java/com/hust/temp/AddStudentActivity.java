@@ -24,21 +24,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.hust.temp.Common.Constant;
-import com.hust.temp.entities.Student;
-import com.hust.temp.entities.StudentInfo;
-import com.hust.temp.sevicesretrofit.AddStudentListener;
-import com.hust.temp.sevicesretrofit.GetListStudentsApiIml;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +42,6 @@ public class AddStudentActivity extends AppCompatActivity {
     private ImageView btnBack;
     private ImageButton btnPickDate;
     private MaterialTextView message;
-    private GetListStudentsApiIml getListStudentsApiIml;
     private ProgressDialog loading;
 
     @Override
