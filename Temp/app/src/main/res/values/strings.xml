@@ -47,6 +47,6 @@
     <string name="exist_student">Mã học sinh đã tồn tại</string>
     <string name="add_student_failed">Thêm học sinh thất bại</string>
     <string name="adding_new_student">Đang thêm mới học sinh</string>
-    <string name="export_success">"Xuất dữ liệu thàn công \n Kiểm tra tại: "</string>
+    <string name="export_success">"Xuất dữ liệu thành công \n Kiểm tra tại: "</string>
     <string name="export_failed">"Lỗi khi xuất dữ liệu: Hãy kiểm tra cấp quyền ứng dụng "</string>
 </resources>

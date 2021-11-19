@@ -64,7 +64,8 @@ public class StudentInfo implements Serializable {
 
     }
 
-    public StudentInfo(int id, String studentName, String studentClass, String birthday, double hypothermia, Date lastUpdatedDate) {
+    public StudentInfo(int id, String studentName, String studentClass, String birthday,
+                       double hypothermia, Date lastUpdatedDate) {
         this.id = id;
         this.studentName = studentName;
         this.studentClass = studentClass;

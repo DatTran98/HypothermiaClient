@@ -1,13 +1,10 @@
 package com.hust.temp.ui.main;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,7 +29,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hust.temp.Common.Constant;
-import com.hust.temp.MainActivity;
 import com.hust.temp.R;
 import com.hust.temp.entities.StudentInfo;
 
@@ -45,15 +41,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static com.hust.temp.R.*;
+import static com.hust.temp.R.id;
+import static com.hust.temp.R.layout;
+import static com.hust.temp.R.string;
 
 public class ListHypothermiaFragment extends Fragment implements CustomDialogFilter.CustomDialogFilterListener {
     private ImageButton btnFilter;
     private TableLayout tblHypothermia;
     private ArrayList<StudentInfo> listStudentInfoSource = new ArrayList<>();
-    private View viewContext;
     private TextView txtFilter;
     private ProgressDialog loading;
 
@@ -74,7 +72,6 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         super.onViewCreated(view, savedInstanceState);
         findViewById(view);
         setEvent();
-        viewContext = view;
 
         listStudentInfoSource = new ArrayList<>();
         setData(listStudentInfoSource);
@@ -83,7 +80,6 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
 
     }
 
-    @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     private void setData(ArrayList<StudentInfo> listStudentInfo) {
         tblHypothermia.removeAllViews();
         if (listStudentInfo != null && !listStudentInfo.isEmpty()) {
@@ -107,7 +103,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                 setTypeForView(t4v, false);
                 tbrow.addView(t4v);
                 TextView t5v = new TextView(getContext());
-                t5v.setText(new SimpleDateFormat("MM-dd-yyyy HH:mm").format(st.getLastUpdatedDate()));
+                t5v.setText(new SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).format(st.getLastUpdatedDate()));
                 setTypeForView(t5v, true);
                 tbrow.addView(t5v);
                 tblHypothermia.addView(tbrow);
@@ -194,15 +190,15 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
             textFilter += getResources().getString(string.temp_to) + parseTempTo + getResources().getString(R.string.comma_end_line);
         }
         if (textDate != null && !textDate.trim().isEmpty()) {
-            String startTimeString = textDate+ " 00:00:00";
-            String endTimeString = textDate+ " 23:59:59";
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String startTimeString = textDate + " 00:00:00";
+            String endTimeString = textDate + " 23:59:59";
+            SimpleDateFormat format = new SimpleDateFormat(Constant.FORMAT_PARTEN);
             try {
-                Date startTime= format.parse(startTimeString);
-                Date endTime =format.parse(endTimeString);
+                Date startTime = format.parse(startTimeString);
+                Date endTime = format.parse(endTimeString);
                 filterSortedStudentInfo = (ArrayList<StudentInfo>) filterSortedStudentInfo.stream()
                         .filter(p -> p.getLastUpdatedDate().getTime() <= endTime.getTime())
-                        .filter(p->p.getLastUpdatedDate().getTime()>=startTime.getTime())
+                        .filter(p -> p.getLastUpdatedDate().getTime() >= startTime.getTime())
                         .collect(Collectors.toList());
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -248,17 +244,17 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                                 int id;
                                 if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
                                         "null")) {
-                                    date = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
+                                    date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
                                 } else {
-                                    date = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-01-01 12:00:00");
+                                    date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN).parse("2021-01-01 12:00:00");
                                 }
-                                if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals("null"))) {
+                                if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals(Constant.NULL_VALUE))) {
                                     tempValue =
                                             Double.parseDouble(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE));
                                 } else {
                                     tempValue = 0;
                                 }
-                                if (!(obj.getString(Constant.KEY_STUDENT_ID).equals("null"))) {
+                                if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
                                     id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
                                 } else {
                                     id = 0;
@@ -309,7 +305,6 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-
             loading.dismiss();
         }
     }

@@ -36,17 +36,21 @@ import java.util.Calendar;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 public class CustomDialogFilter extends DialogFragment implements TextView.OnEditorActionListener {
-    private EditText filterStudentName, filterClass, filterTempFrom, filterTemTo,editTextDate;
+    private EditText filterStudentName, filterClass, filterTempFrom, filterTemTo, editTextDate;
     private TextInputLayout textInputTempFrom, textInputTempTo;
     private MaterialTextView textInputSortByTemp, textInputSortByDate, titleDialog;
     private RadioGroup radioGroupDate, radioGroupTemp;
-    private RadioButton sortByTempIncrease, sortByTempDecrease, sortByDateIncrease, sortByDateDecrease;
+    private RadioButton sortByTempIncrease, sortByTempDecrease, sortByDateIncrease,
+            sortByDateDecrease;
     private CircularProgressButton btnSearch;
     private ImageButton btnPickDate;
     private View searchTextDate;
 
     public interface CustomDialogFilterListener {
-        void onFinishEditDialog(String inputTextName, String inputTextClass, String inputTextTempFrom, String inputTextTempTo, boolean sortDateIncrease, boolean sortDateDecrease,String textDate);
+        void onFinishEditDialog(String inputTextName, String inputTextClass,
+                                String inputTextTempFrom, String inputTextTempTo,
+                                boolean sortDateIncrease, boolean sortDateDecrease,
+                                String textDate);
     }
 
     public static CustomDialogFilter newInstance(String title, boolean studentDialogFilter) {
@@ -71,7 +75,8 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        return getActivity().getLayoutInflater().inflate(R.layout.fragment_filter_dialog, container);
+        return getActivity().getLayoutInflater().inflate(R.layout.fragment_filter_dialog,
+                container);
     }
 
     @Override
@@ -114,7 +119,8 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
         });
     }
 
-    private void requestFocus(EditText filterStudentName, EditText filterTempFrom, EditText filterTemTo, EditText filterClass) {
+    private void requestFocus(EditText filterStudentName, EditText filterTempFrom,
+                              EditText filterTemTo, EditText filterClass) {
         filterStudentName.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -166,7 +172,10 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
     public void sendBackResult() {
         // Notice the use of `getTargetFragment` which will be set when the dialog is displayed
         CustomDialogFilterListener listener = (CustomDialogFilterListener) getTargetFragment();
-        listener.onFinishEditDialog(filterStudentName.getText().toString(), filterClass.getText().toString(), filterTempFrom.getText().toString(), filterTemTo.getText().toString(),sortByDateIncrease.isChecked(), sortByDateDecrease.isChecked(),editTextDate.getText().toString());
+        listener.onFinishEditDialog(filterStudentName.getText().toString(),
+                filterClass.getText().toString(), filterTempFrom.getText().toString(),
+                filterTemTo.getText().toString(), sortByDateIncrease.isChecked(),
+                sortByDateDecrease.isChecked(), editTextDate.getText().toString());
         dismiss();
     }
 
@@ -183,15 +192,18 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
         // Call super onResume after sizing
         super.onResume();
     }
+
     private void buttonSelectDate() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(CustomDialogFilter.this.getContext(), new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog datePickerDialog =
+                new DatePickerDialog(CustomDialogFilter.this.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                editTextDate.setText(year + "-" + (monthOfYear + 1) + "-" +dayOfMonth );
+                editTextDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
             }
         }, year, month, day);
         datePickerDialog.show();

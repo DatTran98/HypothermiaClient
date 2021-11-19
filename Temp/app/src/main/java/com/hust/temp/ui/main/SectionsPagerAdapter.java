@@ -17,7 +17,8 @@ import com.hust.temp.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_hypothermia, R.string.tab_add_student};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_hypothermia,
+            R.string.tab_add_student};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -27,11 +28,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        if (position ==0){
+        if (position == 0) {
             return ListHypothermiaFragment.newInstance();
-        }else if(position==1){
+        } else if (position == 1) {
             return ListStudentFragment.newInstance();
-        }else{
+        } else {
             return getItem(position);
         }
     }

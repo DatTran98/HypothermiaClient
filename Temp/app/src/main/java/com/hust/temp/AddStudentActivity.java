@@ -53,41 +53,30 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
-            }
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.stay);
         });
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnSave.setOnClickListener(v -> {
 
-                String id = studentId.getText().toString();
-                String name = studentName.getText().toString();
-                String stClass = studentClass.getText().toString();
-                String birthday = birthDay.getText().toString();
+            String id = studentId.getText().toString();
+            String name = studentName.getText().toString();
+            String stClass = studentClass.getText().toString();
+            String birthday = birthDay.getText().toString();
 
-                boolean validate = validateField(id, name, stClass, birthday);
-                if (!validate) {
-                    message.setText(getResources().getString(R.string.message_fill_all_text));
-                    message.setVisibility(View.VISIBLE);
-                } else {
-                    message.setVisibility(View.GONE);
-                    loading = ProgressDialog.show(AddStudentActivity.this, getResources().getString(R.string.adding_new_student),
-                            getResources().getString(R.string.waiting_minute), false, false);
-                    addNewStudentVoleley(id, name, stClass, birthday);
-                }
+            boolean validate = validateField(id, name, stClass, birthday);
+            if (!validate) {
+                message.setText(getResources().getString(R.string.message_fill_all_text));
+                message.setVisibility(View.VISIBLE);
+            } else {
+                message.setVisibility(View.GONE);
+                loading = ProgressDialog.show(AddStudentActivity.this, getResources().getString(R.string.adding_new_student),
+                        getResources().getString(R.string.waiting_minute), false, false);
+                addNewStudentVoleley(id, name, stClass, birthday);
             }
         });
-        btnPickDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonSelectDate();
-            }
-        });
+        btnPickDate.setOnClickListener(view -> buttonSelectDate());
     }
 
     private void addNewStudentVoleley(String id, String name, String stClass, String birthday) {
@@ -97,47 +86,41 @@ public class AddStudentActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(AddStudentActivity.this);
 
         StringRequest requestString = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        loading.dismiss();
-                        try {
-                            // on below line we are passing our response
-                            // to json object to extract data from it.
-                            JSONObject respObj = new JSONObject(response);
-                            int status = respObj.getInt(Constant.STATUS);
-                            if (status == 1) {
-                                setDefaultValue();
-                                message.setText(getResources().getString(R.string.add_student_success));
-                                message.setTextColor(getResources().getColor(R.color.teal_200));
-                                message.setVisibility(View.VISIBLE);
-                                setDefaultValue();
-                            } else if (status == 2) {
-                                message.setText(getResources().getString(R.string.exist_student));
-                                message.setVisibility(View.VISIBLE);
-                            } else {
-                                Toast.makeText(AddStudentActivity.this,
-                                        getResources().getString(R.string
-                                        .add_student_failed), Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                response -> {
+                    loading.dismiss();
+                    try {
+                        // on below line we are passing our response
+                        // to json object to extract data from it.
+                        JSONObject respObj = new JSONObject(response);
+                        int status = respObj.getInt(Constant.STATUS);
+                        if (status == 1) {
+                            setDefaultValue();
+                            message.setText(getResources().getString(R.string.add_student_success));
+                            message.setTextColor(getResources().getColor(R.color.teal_200));
+                            message.setVisibility(View.VISIBLE);
+                            setDefaultValue();
+                        } else if (status == 2) {
+                            message.setText(getResources().getString(R.string.exist_student));
+                            message.setVisibility(View.VISIBLE);
+                        } else {
                             Toast.makeText(AddStudentActivity.this,
                                     getResources().getString(R.string
-                                    .can_trans_data), Toast.LENGTH_SHORT).show();
+                                    .add_student_failed), Toast.LENGTH_SHORT).show();
                         }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(AddStudentActivity.this,
+                                getResources().getString(R.string
+                                .can_trans_data), Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loading.dismiss();
-                // method to handle errors.
-                Toast.makeText(AddStudentActivity.this,
-                        getResources().getString(R.string.server_error) + error,
-                        Toast.LENGTH_SHORT).show();
-            }
-        }) {
+                }, error -> {
+                    loading.dismiss();
+                    // method to handle errors.
+                    Toast.makeText(AddStudentActivity.this,
+                            getResources().getString(R.string.server_error) + error,
+                            Toast.LENGTH_SHORT).show();
+                }) {
             @Override
             protected Map<String, String> getParams() {
 
@@ -166,11 +149,7 @@ public class AddStudentActivity extends AppCompatActivity {
     }
 
     private boolean validateField(String id, String name, String stClass, String birthday) {
-        if (id.isEmpty() || name.isEmpty() || stClass.isEmpty() || birthday.isEmpty()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !id.isEmpty() && !name.isEmpty() && !stClass.isEmpty() && !birthday.isEmpty();
     }
 
     private void findViewById() {
@@ -190,12 +169,7 @@ public class AddStudentActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = new DatePickerDialog(AddStudentActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        birthDay.setText(year+ "-" + (monthOfYear + 1) + "-" +dayOfMonth  );
-                    }
-                }, year, month, day);
+                (view, year1, monthOfYear, dayOfMonth) -> birthDay.setText(year1 + "-" + (monthOfYear + 1) + "-" +dayOfMonth  ), year, month, day);
         datePickerDialog.show();
     }
 }
