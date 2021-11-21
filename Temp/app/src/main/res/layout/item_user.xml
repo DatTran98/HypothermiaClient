@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:outlineAmbientShadowColor="@color/teal_700"
+    android:outlineSpotShadowColor="@color/teal_700"
+    app:cardCornerRadius="@dimen/p_5">
+
+<!--    <ScrollView-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+
+        <LinearLayout
+            android:id="@+id/asthma_action_plan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/p_5">
+
+                <TextView
+                    android:id="@+id/studentID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:paddingStart="@dimen/p_5"
+                    android:text=""
+                    android:textSize="@dimen/newsMoreTextSize" />
+
+                <TextView
+                    android:id="@+id/studentClass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingEnd="@dimen/p_5"
+                    android:text=""
+                    android:textSize="@dimen/newsMoreTextSize"
+                    tools:ignore="RelativeOverlap" />
+
+                <TextView
+                    android:id="@+id/studentName"
+                    style="@style/spinnerHintText"
+                    android:layout_below="@id/studentID"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/text_main_color"
+                    android:textSize="@dimen/detailTextSize" />
+
+                <TextView
+                    android:id="@+id/birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/studentClass"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="@dimen/newsMoreTextSize" />
+            </RelativeLayout>
+
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_delete_forever_24" />
+        </LinearLayout>
+<!--    </ScrollView>-->
+</RelativeLayout>

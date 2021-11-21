@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -37,11 +38,13 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class ListStudentFragment extends Fragment implements CustomDialogFilter.CustomDialogFilterListener {
-    private ImageButton btnFilter;
+    private ImageButton btnFilter, btnViewList, btnViewTable;
     private ArrayList<Student> listStudentInfoSource = new ArrayList<>();
-    private TableLayout tblStudents;
+    private TableLayout tblStudents, tblHeader;
     private TextView txtFilter;
     private ProgressDialog loading;
+    private ListView listViewStudents;
+    private ListStudentAdapter listStudentAdapter;
 
     public static ListStudentFragment newInstance() {
         ListStudentFragment fragment = new ListStudentFragment();
@@ -61,8 +64,7 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
         findViewById(view);
         setEvent();
         setData(listStudentInfoSource);
-        GetListStudent getListStudent = new GetListStudent();
-        getListStudent.execute();
+        getListStudent();
     }
 
     private void setData(ArrayList<Student> listStudentInfo) {
@@ -97,6 +99,9 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
             setTypeForView(t0v, false);
             tblStudents.addView(tblRow);
         }
+        listStudentAdapter = new ListStudentAdapter(listStudentInfo);
+        listViewStudents.setAdapter(listStudentAdapter);
+        listStudentAdapter.notifyDataSetChanged();
     }
 
     private void setTypeForView(TextView textView, boolean isIdView) {
@@ -116,11 +121,21 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
     }
 
     private void setEvent() {
-        btnFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditDialog();
-            }
+        btnFilter.setOnClickListener(v -> showEditDialog());
+        btnViewTable.setOnClickListener(v -> {
+            btnViewTable.setVisibility(View.GONE);
+            btnViewList.setVisibility(View.VISIBLE);
+            tblStudents.setVisibility(View.VISIBLE);
+            tblHeader.setVisibility(View.VISIBLE);
+            listViewStudents.setVisibility(View.GONE);
+
+        });
+        btnViewList.setOnClickListener(v -> {
+            btnViewTable.setVisibility(View.VISIBLE);
+            btnViewList.setVisibility(View.GONE);
+            tblStudents.setVisibility(View.GONE);
+            tblHeader.setVisibility(View.GONE);
+            listViewStudents.setVisibility(View.VISIBLE);
         });
     }
 
@@ -136,6 +151,10 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
         btnFilter = view.findViewById(R.id.btn_filter);
         tblStudents = view.findViewById(R.id.tbl_student);
         txtFilter = view.findViewById(R.id.txt_filter);
+        btnViewList = view.findViewById(R.id.btnViewList);
+        btnViewTable = view.findViewById(R.id.btnViewTable);
+        tblHeader = view.findViewById(R.id.tbl_student_header);
+        listViewStudents = view.findViewById(R.id.listViewStudents);
     }
 
     @Override
@@ -162,58 +181,50 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
         txtFilter.setText(textFilter);
     }
 
-    class GetListStudent extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] params) {
-            RequestQueue queue = Volley.newRequestQueue(getContext().getApplicationContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    Constant.ROOT_URL_SUB2, response -> {
-                try {
-                    JSONObject jsonObj = new JSONObject(response);
-                    if (jsonObj != null) {
-                        JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
-                        for (int i = 0; i < jsonArrayRoom.length(); i++) {
-                            JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
-                            int id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
+    private void getListStudent() {
+        loading = ProgressDialog.show(getActivity(),
+                getResources().getString(R.string.loading_data),
+                getResources().getString(R.string.waiting_minute), false, false);
+        RequestQueue queue = Volley.newRequestQueue(getContext().getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                Constant.ROOT_URL_SUB2, response -> {
 
-                            Student student = new Student(id,
-                                    obj.getString(Constant.KEY_STUDENT_NAME),
-                                    obj.getString(Constant.KEY_STUDENT_CLASS),
-                                    obj.getString(Constant.KEY_STUDENT_BIRTHDAY));
-                            listStudentInfoSource.add(student);
-                        }
-                        setData(listStudentInfoSource);
+            try {
+                JSONObject jsonObj = new JSONObject(response);
+                if (jsonObj != null) {
+                    JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
+                    for (int i = 0; i < jsonArrayRoom.length(); i++) {
+                        JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
+                        int id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
+
+                        Student student = new Student(id,
+                                obj.getString(Constant.KEY_STUDENT_NAME),
+                                obj.getString(Constant.KEY_STUDENT_CLASS),
+                                obj.getString(Constant.KEY_STUDENT_BIRTHDAY));
+                        listStudentInfoSource.add(student);
                     }
-                } catch (JSONException e) {
-                    Toast.makeText(getContext().getApplicationContext(),
-                            getResources().getString(R.string.can_trans_data), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                    setData(listStudentInfoSource);
+                    loading.dismiss();
                 }
+            } catch (JSONException e) {
+                loading.dismiss();
+                Toast.makeText(getContext().getApplicationContext(),
+                        getResources().getString(R.string.can_trans_data), Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
 
-            }, error -> Toast.makeText(getContext().getApplicationContext(),
-                    getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show()
-            );
-            stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            stringRequest.setShouldCache(false);
-            queue.add(stringRequest);
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading = ProgressDialog.show(getActivity(),
-                    getResources().getString(R.string.loading_data),
-                    getResources().getString(R.string.waiting_minute), false, false);
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
+        }, error -> {
             loading.dismiss();
-        }
+            Toast.makeText(getContext().getApplicationContext(),
+                    getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
+        });
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setShouldCache(false);
+        queue.add(stringRequest);
+
     }
+
 }
