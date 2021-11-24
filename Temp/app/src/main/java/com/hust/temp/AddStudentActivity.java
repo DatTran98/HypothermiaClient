@@ -3,13 +3,8 @@ package com.hust.temp;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.textview.MaterialTextView;
@@ -124,7 +117,7 @@ public class AddStudentActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
 
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put(Constant.KEY_STUDENT_ID, id);
                 params.put(Constant.KEY_STUDENT_NAME, name);
                 params.put(Constant.KEY_STUDENT_CLASS, stClass);

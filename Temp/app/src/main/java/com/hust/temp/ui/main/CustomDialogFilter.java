@@ -1,9 +1,7 @@
 package com.hust.temp.ui.main;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -92,31 +89,18 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
         if (isStudentDialog) {
             textInputTempFrom.setVisibility(View.GONE);
             textInputTempTo.setVisibility(View.GONE);
-//            textInputSortByTemp.setVisibility(View.GONE);
             textInputSortByDate.setVisibility(View.GONE);
             radioGroupDate.setVisibility(View.GONE);
-//            radioGroupTemp.setVisibility(View.GONE);
             searchTextDate.setVisibility(View.GONE);
         }
         filterStudentName.setOnEditorActionListener(this);
         filterTempFrom.setOnEditorActionListener(this);
         filterTemTo.setOnEditorActionListener(this);
         filterClass.setOnEditorActionListener(this);
-        // Show soft keyboard automatically and request focus to field
         requestFocus(filterStudentName, filterTempFrom, filterTemTo, filterClass);
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendBackResult();
-            }
-        });
-        btnPickDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonSelectDate();
-            }
-        });
+        btnSearch.setOnClickListener(view12 -> sendBackResult());
+        btnPickDate.setOnClickListener(view1 -> buttonSelectDate());
     }
 
     private void requestFocus(EditText filterStudentName, EditText filterTempFrom,
@@ -142,14 +126,10 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
         filterClass = (EditText) view.findViewById(R.id.txt_class);
         textInputTempFrom = (TextInputLayout) view.findViewById(R.id.textInputTempFrom);
         textInputTempTo = (TextInputLayout) view.findViewById(R.id.textInputTempTo);
-//        textInputSortByTemp = (MaterialTextView) view.findViewById(R.id.textInputSortByTemp);
         textInputSortByDate = (MaterialTextView) view.findViewById(R.id.textInputSortByDate);
         titleDialog = (MaterialTextView) view.findViewById(R.id.titleDialog);
-//        radioGroupTemp = (RadioGroup) view.findViewById(R.id.radio_group_temp);
         radioGroupDate = (RadioGroup) view.findViewById(R.id.radio_group_date);
         btnSearch = (CircularProgressButton) view.findViewById(R.id.btnSearch);
-//        sortByTempIncrease = (RadioButton) view.findViewById(R.id.sort_by_temp_increase);
-//        sortByTempDecrease = (RadioButton) view.findViewById(R.id.sort_by_temp_decrease);
         sortByDateIncrease = (RadioButton) view.findViewById(R.id.sort_by_date_increase);
         sortByDateDecrease = (RadioButton) view.findViewById(R.id.sort_by_date_decrease);
         editTextDate = (EditText) view.findViewById(R.id.editTextDate);
@@ -200,12 +180,7 @@ public class CustomDialogFilter extends DialogFragment implements TextView.OnEdi
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog =
                 new DatePickerDialog(CustomDialogFilter.this.getContext(),
-                        new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                editTextDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-            }
-        }, year, month, day);
+                        (view, year1, monthOfYear, dayOfMonth) -> editTextDate.setText(year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth), year, month, day);
         datePickerDialog.show();
     }
 }

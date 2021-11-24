@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -48,7 +50,7 @@ import java.util.stream.Collectors;
 import static com.hust.temp.R.id;
 import static com.hust.temp.R.layout;
 import static com.hust.temp.R.string;
-
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ListHypothermiaFragment extends Fragment implements CustomDialogFilter.CustomDialogFilterListener {
     private ImageButton btnFilter;
     private TableLayout tblHypothermia;
@@ -85,28 +87,28 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         if (listStudentInfo != null && !listStudentInfo.isEmpty()) {
 
             for (StudentInfo st : listStudentInfo) {
-                TableRow tbrow = new TableRow(getContext());
+                TableRow tblRow = new TableRow(getContext());
                 TextView t1v = new TextView(getContext());
                 t1v.setText(st.getStudentName());
                 setTypeForView(t1v, false);
-                tbrow.addView(t1v);
+                tblRow.addView(t1v);
                 TextView t2v = new TextView(getContext());
                 t2v.setText(st.getStudentClass());
                 setTypeForView(t2v, false);
-                tbrow.addView(t2v);
+                tblRow.addView(t2v);
                 TextView t3v = new TextView(getContext());
                 t3v.setText(st.getBirthday());
                 setTypeForView(t3v, false);
-                tbrow.addView(t3v);
+                tblRow.addView(t3v);
                 TextView t4v = new TextView(getContext());
                 t4v.setText(st.getHypothermia()+"");
                 setTypeForView(t4v, false);
-                tbrow.addView(t4v);
+                tblRow.addView(t4v);
                 TextView t5v = new TextView(getContext());
                 t5v.setText(new SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).format(st.getLastUpdatedDate()));
                 setTypeForView(t5v, true);
-                tbrow.addView(t5v);
-                tblHypothermia.addView(tbrow);
+                tblRow.addView(t5v);
+                tblHypothermia.addView(tblRow);
             }
         } else {
             TableRow tblRow = new TableRow(getContext());

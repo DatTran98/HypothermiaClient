@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -104,38 +103,6 @@
                 </RelativeLayout>
             </com.google.android.material.textfield.TextInputLayout>
 
-<!--            <com.google.android.material.textview.MaterialTextView-->
-<!--                android:id="@+id/textInputSortByTemp"-->
-<!--                style="@style/modifiedEditText"-->
-<!--                android:layout_marginTop="@dimen/loginViewsMargin"-->
-<!--                android:text="@string/sort_by_temp">-->
-
-<!--            </com.google.android.material.textview.MaterialTextView>-->
-<!--            <RadioGroup-->
-<!--                android:id="@+id/radio_group_temp"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content">-->
-
-<!--                <RadioButton-->
-<!--                    android:id="@+id/sort_by_temp_increase"-->
-<!--                    style="@style/modifiedEditText"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/loginViewsMargin"-->
-<!--                    android:checked="true"-->
-<!--                    android:text="@string/increase" />-->
-
-<!--                <RadioButton-->
-<!--                    android:id="@+id/sort_by_temp_decrease"-->
-<!--                    style="@style/modifiedEditText"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/loginViewsMargin"-->
-<!--                    android:checked="false"-->
-<!--                    android:text="@string/decrease" />-->
-
-<!--            </RadioGroup>-->
-
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textInputSortByDate"
                 style="@style/modifiedEditText"
@@ -168,18 +135,6 @@
                     android:text="@string/decrease" />
 
             </RadioGroup>
-
-            <!--                    <com.google.android.material.textfield.TextInputLayout-->
-            <!--                        android:id="@+id/textInputPassword"-->
-            <!--                        style="@style/parent"-->
-            <!--                        android:layout_marginTop="@dimen/loginViewsMargin">-->
-            <!--                        <EditText-->
-            <!--                            android:id="@+id/editTextPassword"-->
-            <!--                            style="@style/modifiedEditText"-->
-            <!--                            android:hint="@string/login_password_hint"-->
-            <!--                            android:inputType="textPassword"-->
-            <!--                            android:maxLines="1" />-->
-            <!--                    </com.google.android.material.textfield.TextInputLayout>-->
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/btnSearch"
                 style="@style/loginButton"

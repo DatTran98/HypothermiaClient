@@ -36,4 +36,5 @@ public class Constant {
     public static final String DATE_DEFAULT = "2021-01-01 12:00:00";
     public static final String COMMA = ": ";
     public static final String COMMA_DIVISION = "/";
+    public static final String FORMAT_DATE_STRING = "yyyy-MM-dd";
 }

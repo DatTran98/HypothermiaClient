@@ -12,7 +12,7 @@ import com.hust.temp.entities.Student;
 import java.util.ArrayList;
 
 public class ListStudentAdapter extends BaseAdapter {
-    private ArrayList<Student> listStudents;
+    private final ArrayList<Student> listStudents;
 
     public ListStudentAdapter(ArrayList<Student> listStudentsAdapter) {
         this.listStudents = listStudentsAdapter;

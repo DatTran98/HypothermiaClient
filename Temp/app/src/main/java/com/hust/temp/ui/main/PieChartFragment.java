@@ -2,7 +2,9 @@ package com.hust.temp.ui.main;
 
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,16 +29,15 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.hust.temp.Common.Common;
 import com.hust.temp.Common.Constant;
 import com.hust.temp.R;
-import com.hust.temp.entities.Student;
 import com.hust.temp.entities.StudentInfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,11 +111,13 @@ public class PieChartFragment extends Fragment {
                 setTypeForView(t3v, false);
                 tbrow.addView(t3v);
                 TextView t4v = new TextView(getContext());
-                t4v.setText(st.getHypothermia() + "");
+                t4v.setText(String.format("%s",st.getHypothermia()));
                 setTypeForView(t4v, false);
                 tbrow.addView(t4v);
                 TextView t5v = new TextView(getContext());
-                t5v.setText(new SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).format(st.getLastUpdatedDate()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    t5v.setText(new SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).format(st.getLastUpdatedDate()));
+                }
                 setTypeForView(t5v, true);
                 tbrow.addView(t5v);
                 tblStudentNotYes.addView(tbrow);
@@ -165,28 +168,28 @@ public class PieChartFragment extends Fragment {
         }
         Collection<StudentInfo> uniqueStudentInfoCollection = map.values();
         ArrayList<StudentInfo> uniqueStudentInfo = new ArrayList<>(uniqueStudentInfoCollection);
-
         ArrayList<StudentInfo> listStudentDone =
-                (ArrayList<StudentInfo>) uniqueStudentInfo.stream().filter(p->p.getLastUpdatedDate().getTime()> new Date().getTime()).collect(Collectors.toList()).stream()
-                        .filter(p -> p.getHypothermia() > 0).collect(Collectors.toList());
+                null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            listStudentDone = (ArrayList<StudentInfo>) uniqueStudentInfo.stream()
+                    .filter(p -> p.getLastUpdatedDate().getTime() <= Common.getEndOfDay().getTime())
+                    .filter(p -> p.getLastUpdatedDate().getTime() >= Common.getStartOfDay().getTime())
+                    .filter(p -> p.getHypothermia() > 0).collect(Collectors.toList());
+        }
 
-//        ArrayList<StudentInfo> listStudentNotYes =
-//                (ArrayList<StudentInfo>) uniqueStudentInfo.stream().filter(p->p.getLastUpdatedDate().getTime()> new Date().getTime()).collect(Collectors.toList()).stream()
-//                        .filter(p -> p.getHypothermia() == 0).collect(Collectors.toList());
-        ArrayList<StudentInfo> listStudentNotYes = uniqueStudentInfo;
-        listStudentNotYes.remove(listStudentDone);
+        ArrayList<StudentInfo> listStudentNotYes = new ArrayList<>(uniqueStudentInfoCollection);;
+        listStudentNotYes.removeAll(listStudentDone);
         float studentNotYesPercentage =
-                ((float) listStudentDone.size() / (float) uniqueStudentInfo.size()) * 100;
+                ((float) listStudentNotYes.size() / (float) uniqueStudentInfo.size()) * 100;
         float studentDonePercentage = 100 - studentNotYesPercentage;
 
-        ArrayList<PieEntry> yvalues = new ArrayList<>();
-        yvalues.add(new PieEntry(studentNotYesPercentage,
+        ArrayList<PieEntry> yValues = new ArrayList<>();
+        yValues.add(new PieEntry(studentDonePercentage,
                 getString(R.string.temp_done) + Constant.COMMA + listStudentDone.size() + Constant.COMMA_DIVISION + uniqueStudentInfo.size(), 0));
-        yvalues.add(new PieEntry(studentDonePercentage,
+        yValues.add(new PieEntry(studentNotYesPercentage,
                 getString(R.string.temp_not_yes) + Constant.COMMA + (uniqueStudentInfo.size() - listStudentDone.size()) + Constant.COMMA_DIVISION + uniqueStudentInfo.size(), 1));
 
-
-        PieDataSet dataSet = new PieDataSet(yvalues, getString(R.string.hypothermia_results));
+        PieDataSet dataSet = new PieDataSet(yValues, getString(R.string.hypothermia_results));
         PieData data = new PieData(dataSet);
 
         data.setValueFormatter(new PercentFormatter());

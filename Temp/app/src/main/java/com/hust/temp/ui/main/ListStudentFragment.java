@@ -2,7 +2,7 @@ package com.hust.temp.ui.main;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -37,9 +38,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ListStudentFragment extends Fragment implements CustomDialogFilter.CustomDialogFilterListener {
     private ImageButton btnFilter, btnViewList, btnViewTable;
-    private ArrayList<Student> listStudentInfoSource = new ArrayList<>();
+    private final ArrayList<Student> listStudentInfoSource = new ArrayList<>();
     private TableLayout tblStudents, tblHeader;
     private TextView txtFilter;
     private ProgressDialog loading;
@@ -47,8 +49,7 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
     private ListStudentAdapter listStudentAdapter;
 
     public static ListStudentFragment newInstance() {
-        ListStudentFragment fragment = new ListStudentFragment();
-        return fragment;
+        return new ListStudentFragment();
     }
 
     @Override
@@ -73,7 +74,7 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
             for (Student st : listStudentInfo) {
                 TableRow tblRow = new TableRow(getContext());
                 TextView t0v = new TextView(getContext());
-                t0v.setText(st.getStudentID() + "");
+                t0v.setText(String.format("%s",st.getStudentID()));
                 setTypeForView(t0v, true);
                 tblRow.addView(t0v);
                 TextView t1v = new TextView(getContext());
@@ -224,7 +225,5 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
         queue.add(stringRequest);
-
     }
-
 }
