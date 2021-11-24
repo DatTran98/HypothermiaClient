@@ -49,4 +49,9 @@
     <string name="adding_new_student">Đang thêm mới học sinh</string>
     <string name="export_success">"Xuất dữ liệu thành công \n Kiểm tra tại: "</string>
     <string name="export_failed">"Lỗi khi xuất dữ liệu: Hãy kiểm tra cấp quyền ứng dụng "</string>
+    <string name="pie_chart_title">Biểu đồ thân nhiệt</string>
+    <string name="hypothermia_results">Kết quả thân nhiệt</string>
+    <string name="tab_pie_chart">Biểu đồ</string>
+    <string name="temp_not_yes">Chưa đo</string>
+    <string name="temp_done">Đã đo</string>
 </resources>

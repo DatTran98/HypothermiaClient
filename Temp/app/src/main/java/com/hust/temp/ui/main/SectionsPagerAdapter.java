@@ -18,7 +18,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_hypothermia,
-            R.string.tab_add_student};
+            R.string.tab_add_student,R.string.tab_pie_chart};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -32,6 +32,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
             return ListHypothermiaFragment.newInstance();
         } else if (position == 1) {
             return ListStudentFragment.newInstance();
+        } else if (position == 2) {
+            return PieChartFragment.newInstance();
         } else {
             return getItem(position);
         }
@@ -45,6 +47,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     compile (
             group: 'com.aspose',
             name: 'aspose-cells',
@@ -65,5 +66,6 @@ allprojects {
         }
         maven {
             url "https://repository.aspose.com/repo/" }
+        maven { url 'http://repo1.maven.org/maven2' }
     }
 }

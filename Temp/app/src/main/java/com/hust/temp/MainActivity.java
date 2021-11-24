@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        tabs.setTabMode(TabLayout.MODE_FIXED);
+        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
         tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -67,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         txtTitle.setText(R.string.list_students);
+                        break;
+                    case 2:
+                        txtTitle.setText(R.string.pie_chart_title);
                         break;
                     default:
                         break;

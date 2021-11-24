@@ -2,7 +2,7 @@ package com.hust.temp.Common;
 
 public class Constant {
 
-    public static final String ROOT_URL = "http://webappdemo20.000webhostapp.com/";
+//    public static final String ROOT_URL = "http://webappdemo20.000webhostapp.com/";
     public static final String ROOT_URL_SUB1 = "https://webappdemo20.000webhostapp" +
             ".com/tempproject/student_api.php";
     public static final String ROOT_URL_SUB2 = "https://webappdemo20.000webhostapp" +
@@ -25,12 +25,7 @@ public class Constant {
     public static final String KEY_STUDENT_BIRTHDAY = "birthday";
     public static final String KEY_HYPOTHERMIA_VALUE = "temp_value";
     public static final String KEY_HYPOTHERMIA_LAST_UPDATE = "last_update";
-    public static final String URL_LIST_STUDENTS = "/tempproject/student_api.php";
-    public static final String URL_ADD_STUDENT = "/tempproject/add_student_api.php";
-    public static final String COMMA_DELIMITER = ",";
-    public static final String NEW_LINE_SEPARATOR = "\n";
-    public static final String FILE_HEADER = "Mã học sinh,Tên,Lớp,Ngày sinh,Thân nhiệt,Ngày cập " +
-            "nhật";
+    public static final String KEY_LIST_HYPOTHERMIA = "list_hypothermia";
     public static final String[] ARRAY_HEADER = {"Mã học sinh", "Tên", "Lớp", "Ngày sinh", "Thân " +
             "nhiệt", "Ngày cập nhật"};
     public static final String STATUS = "status";
@@ -38,4 +33,7 @@ public class Constant {
     public static final String FORMAT_PARTEN = "yyyy-MM-dd HH:mm:ss";
     public static final String NULL_VALUE = "null";
     public static final String STUDENT_TEMP = "Thân nhiệt học sinh";
+    public static final String DATE_DEFAULT = "2021-01-01 12:00:00";
+    public static final String COMMA = ": ";
+    public static final String COMMA_DIVISION = "/";
 }

@@ -1,5 +1,6 @@
 package com.hust.temp.ui.main;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
@@ -56,8 +57,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
     private ProgressDialog loading;
 
     public static ListHypothermiaFragment newInstance() {
-        ListHypothermiaFragment fragment = new ListHypothermiaFragment();
-        return fragment;
+        return new ListHypothermiaFragment();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                 setTypeForView(t3v, false);
                 tbrow.addView(t3v);
                 TextView t4v = new TextView(getContext());
-                t4v.setText(st.getHypothermia() + "");
+                t4v.setText(st.getHypothermia()+"");
                 setTypeForView(t4v, false);
                 tbrow.addView(t4v);
                 TextView t5v = new TextView(getContext());
@@ -135,12 +135,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
     }
 
     private void setEvent() {
-        btnFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showEditDialog();
-            }
-        });
+        btnFilter.setOnClickListener(v -> showEditDialog());
     }
 
     private void findViewById(View view) {
@@ -192,7 +187,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         if (textDate != null && !textDate.trim().isEmpty()) {
             String startTimeString = textDate + " 00:00:00";
             String endTimeString = textDate + " 23:59:59";
-            SimpleDateFormat format = new SimpleDateFormat(Constant.FORMAT_PARTEN);
+            SimpleDateFormat format = new SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT);
             try {
                 Date startTime = format.parse(startTimeString);
                 Date endTime = format.parse(endTimeString);
@@ -225,65 +220,59 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         txtFilter.setText(textFilter);
     }
 
+    @SuppressLint("StaticFieldLeak")
     class GetListStudentInfo extends AsyncTask {
         @Override
         protected Object doInBackground(Object[] params) {
             RequestQueue queue = Volley.newRequestQueue(getContext().getApplicationContext());
             StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    Constant.ROOT_URL_SUB1, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonObj = new JSONObject(response);
-                        if (jsonObj != null) {
-                            JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
-                            for (int i = 0; i < jsonArrayRoom.length(); i++) {
-                                JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
-                                Date date;
-                                double tempValue;
-                                int id;
-                                if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
-                                        "null")) {
-                                    date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
-                                } else {
-                                    date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN).parse("2021-01-01 12:00:00");
-                                }
-                                if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals(Constant.NULL_VALUE))) {
-                                    tempValue =
-                                            Double.parseDouble(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE));
-                                } else {
-                                    tempValue = 0;
-                                }
-                                if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
-                                    id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
-                                } else {
-                                    id = 0;
-                                }
+                    Constant.ROOT_URL_SUB1, response -> {
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            if (jsonObj != null) {
+                                JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
+                                for (int i = 0; i < jsonArrayRoom.length(); i++) {
+                                    JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
+                                    Date date;
+                                    double tempValue;
+                                    int id;
+                                    if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
+                                            "null")) {
+                                        date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
+                                    } else {
+                                        date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT).parse(Constant.DATE_DEFAULT);
+                                    }
+                                    if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals(Constant.NULL_VALUE))) {
+                                        tempValue =
+                                                Double.parseDouble(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE));
+                                    } else {
+                                        tempValue = 0;
+                                    }
+                                    if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
+                                        id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
+                                    } else {
+                                        id = 0;
+                                    }
 
-                                StudentInfo studentInfo = new StudentInfo(id,
-                                        obj.getString(Constant.KEY_STUDENT_NAME),
-                                        obj.getString(Constant.KEY_STUDENT_CLASS),
-                                        obj.getString(Constant.KEY_STUDENT_BIRTHDAY), tempValue,
-                                        date);
-                                listStudentInfoSource.add(studentInfo);
+                                    StudentInfo studentInfo = new StudentInfo(id,
+                                            obj.getString(Constant.KEY_STUDENT_NAME),
+                                            obj.getString(Constant.KEY_STUDENT_CLASS),
+                                            obj.getString(Constant.KEY_STUDENT_BIRTHDAY), tempValue,
+                                            date);
+                                    listStudentInfoSource.add(studentInfo);
+                                }
+                                setData(listStudentInfoSource);
+                                getActivity().getIntent().putExtra(Constant.KEY_LIST_HYPOTHERMIA,listStudentInfoSource);
                             }
-                            setData(listStudentInfoSource);
+                        } catch (JSONException | ParseException e) {
+                            Toast.makeText(getContext().getApplicationContext(),
+                                    getResources().getString(string.can_trans_data),
+                                    Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
                         }
-                    } catch (JSONException | ParseException e) {
-                        Toast.makeText(getContext().getApplicationContext(),
-                                getResources().getString(R.string.can_trans_data),
-                                Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
 
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getContext().getApplicationContext(),
-                            getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
-                }
-            }
+                    }, error -> Toast.makeText(getContext().getApplicationContext(),
+                            getResources().getString(string.server_error), Toast.LENGTH_LONG).show()
             );
             stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
