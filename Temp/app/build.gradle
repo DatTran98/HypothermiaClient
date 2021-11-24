@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.hust.temp"
-        minSdkVersion 29
+        minSdkVersion 28
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -66,6 +66,6 @@ allprojects {
         }
         maven {
             url "https://repository.aspose.com/repo/" }
-        maven { url 'http://repo1.maven.org/maven2' }
+//        maven { url 'http://repo1.maven.org/maven2' }
     }
 }

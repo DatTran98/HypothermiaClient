@@ -54,4 +54,6 @@
     <string name="tab_pie_chart">Biểu đồ</string>
     <string name="temp_not_yes">Chưa đo</string>
     <string name="temp_done">Đã đo</string>
+    <string name="view_student_not_yes">Danh sách học sinh chưa đo</string>
+    <string name="see_chart">Xem biểu đồ</string>
 </resources>

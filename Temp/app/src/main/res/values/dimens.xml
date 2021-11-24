@@ -11,6 +11,7 @@
     <dimen name="detailTextSize">15sp</dimen>
     <dimen name="loginViewsMargin">20dp</dimen>
     <dimen name="p_5">5dp</dimen>
+    <dimen name="m_8">8dp</dimen>
     <dimen name="m_25">25dp</dimen>
     <dimen name="p_3">3dp</dimen>
 
