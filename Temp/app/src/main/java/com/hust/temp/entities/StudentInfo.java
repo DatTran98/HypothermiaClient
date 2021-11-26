@@ -7,11 +7,11 @@ import java.util.Date;
 
 public class StudentInfo implements Serializable {
     @SerializedName("studentId")
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -64,7 +64,7 @@ public class StudentInfo implements Serializable {
 
     }
 
-    public StudentInfo(int id, String studentName, String studentClass, String birthday,
+    public StudentInfo(long id, String studentName, String studentClass, String birthday,
                        double hypothermia, Date lastUpdatedDate) {
         this.id = id;
         this.studentName = studentName;
@@ -74,7 +74,7 @@ public class StudentInfo implements Serializable {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
-    private int id;
+    private long id;
     private String studentName, studentClass, birthday;
     private double hypothermia;
     private Date lastUpdatedDate;

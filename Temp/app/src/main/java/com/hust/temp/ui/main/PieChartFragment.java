@@ -159,9 +159,9 @@ public class PieChartFragment extends Fragment {
     private void drawChart(ArrayList<StudentInfo> listStudentInfoSource) {
         pieChart.setUsePercentValues(true);
 
-        Map<Integer, StudentInfo> map = new HashMap<Integer, StudentInfo>();
+        Map<Long, StudentInfo> map = new HashMap<Long, StudentInfo>();
         for (StudentInfo studentInfo : listStudentInfoSource) {
-            int key = studentInfo.getId();
+            long key = studentInfo.getId();
             if (!map.containsKey(key)) {
                 map.put(key, studentInfo);
             }

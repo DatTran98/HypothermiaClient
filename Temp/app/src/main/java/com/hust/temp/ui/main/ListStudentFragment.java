@@ -196,7 +196,7 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
                     JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
                     for (int i = 0; i < jsonArrayRoom.length(); i++) {
                         JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
-                        int id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
+                        long id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
 
                         Student student = new Student(id,
                                 obj.getString(Constant.KEY_STUDENT_NAME),

@@ -90,7 +90,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                 TableRow tblRow = new TableRow(getContext());
                 TextView t1v = new TextView(getContext());
                 t1v.setText(st.getStudentName());
-                setTypeForView(t1v, false);
+                setTypeForView(t1v, true);
                 tblRow.addView(t1v);
                 TextView t2v = new TextView(getContext());
                 t2v.setText(st.getStudentClass());
@@ -237,7 +237,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                                     JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
                                     Date date;
                                     double tempValue;
-                                    int id;
+                                    long id;
                                     if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
                                             "null")) {
                                         date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
@@ -251,7 +251,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                                         tempValue = 0;
                                     }
                                     if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
-                                        id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
+                                        id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
                                     } else {
                                         id = 0;
                                     }
