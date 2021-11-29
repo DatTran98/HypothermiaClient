@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -51,8 +52,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this,
-                getSupportFragmentManager());
+        SectionsPagerAdapter sectionsPagerAdapter = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            sectionsPagerAdapter = new SectionsPagerAdapter(this,
+                    getSupportFragmentManager());
+        }
         findViewById();
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
@@ -145,8 +149,10 @@ public class MainActivity extends AppCompatActivity {
                     cells.get(i + 1, 2).putValue(listUserInfoExport.get(i).getStudentClass());
                     cells.get(i + 1, 3).putValue(listUserInfoExport.get(i).getBirthday());
                     cells.get(i + 1, 4).putValue(listUserInfoExport.get(i).getHypothermia());
-                    cells.get(i + 1, 5).putValue((new SimpleDateFormat(Constant.FORMAT_PARTEN,
-                            Locale.ROOT).format(listUserInfoExport.get(i).getLastUpdatedDate())));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        cells.get(i + 1, 5).putValue((new SimpleDateFormat(Constant.FORMAT_PARTEN,
+                                Locale.ROOT).format(listUserInfoExport.get(i).getLastUpdatedDate())));
+                    }
                 }
                 workbook.save(dir + Constant.FILE_NAME);
                 Toast.makeText(this, getResources().getString(R.string.export_success) + dir,
@@ -171,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
                     Date date;
                     double tempValue;
-                    int id;
+                    long id;
                     if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
                             Constant.NULL_VALUE)) {
                         date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,
@@ -187,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                         tempValue = 0;
                     }
                     if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
-                        id = Integer.parseInt(obj.getString(Constant.KEY_STUDENT_ID));
+                        id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
                     } else {
                         id = 0;
                     }
@@ -223,5 +229,15 @@ public class MainActivity extends AppCompatActivity {
         loading = ProgressDialog.show(this,
                 "",
                 getResources().getString(R.string.export), false, false);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                exportCSV();
+            }
+        }
     }
 }
