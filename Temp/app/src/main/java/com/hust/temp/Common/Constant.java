@@ -2,13 +2,14 @@ package com.hust.temp.Common;
 
 public class Constant {
 
-//    public static final String ROOT_URL = "http://webappdemo20.000webhostapp.com/";
+    //    public static final String ROOT_URL = "http://webappdemo20.000webhostapp.com/";
     public static final String ROOT_URL_SUB1 = "https://webappdemo20.000webhostapp" +
             ".com/tempproject/student_api.php";
     public static final String ROOT_URL_SUB2 = "https://webappdemo20.000webhostapp" +
             ".com/tempproject/sub_student_api.php";
     public static final String ROOT_URL_ADD = "https://webappdemo20.000webhostapp" +
             ".com/tempproject/add_student_api.php";
+    public static final String ROOT_URL_LOGIN = "https://webappdemo20.000webhostapp.com/tempproject/login_api.php";
 
     public static final String DIALOG_TITLE = "title";
     public static final String FILTER_TITLE = "Bộ lọc";

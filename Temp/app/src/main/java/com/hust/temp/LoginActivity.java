@@ -25,7 +25,6 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 public class LoginActivity extends AppCompatActivity {
     SharedPreferences.Editor preferencesEditor;
-    String URL_LOGIN = "https://protocoderspoint.com/php/login.php";
     EditText username, password;
     CircularProgressButton btnLogin;
     String usernameLogin, passLogin;
@@ -71,18 +70,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN,
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, Constant.ROOT_URL_LOGIN,
                 response -> {
-                    Log.e("anyText", response);
+                    Log.w("anyText", response);
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String success = jsonObject.getString("success");
                         String message = jsonObject.getString("message");
-                        String id = jsonObject.getString("id");
-                        String name = jsonObject.getString("name");
-                        String username = jsonObject.getString("username");
-                        String role = jsonObject.getString("role");
+
                         if (success.equals("1")) {
+                            String id = jsonObject.getString("id");
+                            String name = jsonObject.getString("full_name");
+                            String username = jsonObject.getString("username");
+                            String role = jsonObject.getString("role");
                             Toast.makeText(getApplicationContext(), "Logged In  Success", Toast.LENGTH_LONG).show();
                             preferencesEditor.putString(Constant.IS_LOGGED_IN, "true");
                             preferencesEditor.putString("SignedInUserID", id);
@@ -98,10 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 //                                pdDialog.dismiss();
                         }
-                        if (success.equals("3")) {
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//                                pdDialog.dismiss();
-                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "Login Error !1" + e, Toast.LENGTH_LONG).show();
