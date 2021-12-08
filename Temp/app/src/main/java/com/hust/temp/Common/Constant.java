@@ -9,12 +9,7 @@ public class Constant {
             ".com/tempproject/sub_student_api.php";
     public static final String ROOT_URL_ADD = "https://webappdemo20.000webhostapp" +
             ".com/tempproject/add_student_api.php";
-    //    public static final String ROOT_URL = "http://webappdemo20.000webhostapp.com/";
-//    public static final String ROOT_URL_SUB1 = "http://10.0.2.2:88/tempproject/student_api.php";
-//    public static final String ROOT_URL_SUB2 = "http://10.0.2.2:88/tempproject/sub_student_api
-//    .php";
-//    public static final String ROOT_URL = "http://10.0.2.2:88/tempproject/";
-//    public static final String ROOT_URL = "http://192.168.1.1/tempproject/";
+
     public static final String DIALOG_TITLE = "title";
     public static final String FILTER_TITLE = "Bộ lọc";
     public static final String STUDENT_DIALOG_TYPE = "typeDialog";
@@ -37,4 +32,9 @@ public class Constant {
     public static final String COMMA = ": ";
     public static final String COMMA_DIVISION = "/";
     public static final String FORMAT_DATE_STRING = "yyyy-MM-dd";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+    public static final String IS_LOGGED_IN = "isLoggedIn";
 }

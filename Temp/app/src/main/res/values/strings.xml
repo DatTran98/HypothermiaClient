@@ -2,7 +2,7 @@
     <string name="app_name">Thân nhiệt</string>
     <string name="tab_hypothermia">Thân nhiệt</string>
     <string name="tab_add_student">Học sinh</string>
-    <string name="login_email_hint">Email</string>
+    <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
     <string name="add_new_student">Thêm \nhọc sinh mới</string>
     <string name="save">Lưu</string>
@@ -56,4 +56,7 @@
     <string name="temp_done">Đã đo</string>
     <string name="view_student_not_yes">Danh sách học sinh chưa đo</string>
     <string name="see_chart">Xem biểu đồ</string>
+    <string name="welcome_to_hypothermia">Welcom to \nHyphothermia app</string>
+    <string name="login">Login</string>
+    <string name="new_user_register_now">New user? Contact to admintrator</string>
 </resources>

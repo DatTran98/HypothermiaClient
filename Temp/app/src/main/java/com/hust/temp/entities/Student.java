@@ -16,32 +16,16 @@ public class Student {
         return studentID;
     }
 
-    public void setStudentID(int studentID) {
-        this.studentID = studentID;
-    }
-
     public String getStudentName() {
         return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
     }
 
     public String getStudentClass() {
         return studentClass;
     }
 
-    public void setStudentClass(String studentClass) {
-        this.studentClass = studentClass;
-    }
-
     public String getBirthday() {
         return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
     }
 
     public Student(long studentID, String studentName, String studentClass, String birthday) {

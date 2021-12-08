@@ -20,7 +20,7 @@
         android:theme="@style/Theme.Temp"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Temp.NoActionBar"
             android:windowSoftInputMode="adjustResize">
@@ -32,6 +32,10 @@
         </activity>
         <activity
             android:name=".AddStudentActivity"
+            android:theme="@style/Theme.Temp.NoActionBar">
+        </activity>
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/Theme.Temp.NoActionBar">
         </activity>
     </application>

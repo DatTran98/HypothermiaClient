@@ -44,7 +44,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab, btnExport;
     private TextView txtTitle;
-    private ArrayList<StudentInfo> listStudentInfoSource = new ArrayList<>();
+    private final ArrayList<StudentInfo> listStudentInfoSource = new ArrayList<>();
     private Boolean exit = false;
     private ProgressDialog loading;
 
@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void exportCSV() {
-        StringBuilder data = new StringBuilder();
         try {
             ArrayList<StudentInfo> listUserInfoExport = listStudentInfoSource;
             if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -132,11 +131,6 @@ public class MainActivity extends AppCompatActivity {
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                 // Open Stream to write file.
                 File dir = new File(root.getAbsolutePath());
-//                dir.mkdirs();
-//                File file = new File(dir, Constant.FILE_NAME);
-//                FileOutputStream out = new FileOutputStream(file);
-//                out.write(data.toString().getBytes(StandardCharsets.UTF_8));
-//                out.close();
                 Workbook workbook = new Workbook();
                 for (int i = 0; i < Constant.ARRAY_HEADER.length; i++) {
                     workbook.getWorksheets().get(0).getCells().get(0, i).putValue(Constant.ARRAY_HEADER[i]);
@@ -184,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                                 Locale.ROOT).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
                     } else {
                         date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,
-                                Locale.ROOT).parse("2021-01-01 12:00:00");
+                                Locale.ROOT).parse(Constant.DATE_DEFAULT);
                     }
                     if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals(Constant.NULL_VALUE))) {
                         tempValue =

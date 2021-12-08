@@ -20,49 +20,30 @@ public class StudentInfo implements Serializable {
         return studentName;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
 
     @SerializedName("studentClass")
     public String getStudentClass() {
         return studentClass;
     }
 
-    public void setStudentClass(String studentClass) {
-        this.studentClass = studentClass;
-    }
 
     @SerializedName("birthday")
     public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
 
     @SerializedName("hypothermia")
     public double getHypothermia() {
         return hypothermia;
     }
 
-    public void setHypothermia(double hypothermia) {
-        this.hypothermia = hypothermia;
-    }
 
     @SerializedName("lastUpdateDate")
     public Date getLastUpdatedDate() {
         return lastUpdatedDate;
     }
 
-    public void setLastUpdatedDate(Date lastUpdatedDate) {
-        this.lastUpdatedDate = lastUpdatedDate;
-    }
-
-    public StudentInfo() {
-
-    }
 
     public StudentInfo(long id, String studentName, String studentClass, String birthday,
                        double hypothermia, Date lastUpdatedDate) {
@@ -75,7 +56,9 @@ public class StudentInfo implements Serializable {
     }
 
     private long id;
-    private String studentName, studentClass, birthday;
-    private double hypothermia;
-    private Date lastUpdatedDate;
+    private final String studentName;
+    private final String studentClass;
+    private final String birthday;
+    private final double hypothermia;
+    private final Date lastUpdatedDate;
 }
