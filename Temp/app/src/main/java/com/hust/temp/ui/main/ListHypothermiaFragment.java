@@ -1,10 +1,11 @@
 package com.hust.temp.ui.main;
 
-import android.annotation.SuppressLint;
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -27,8 +28,6 @@ import androidx.fragment.app.FragmentManager;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hust.temp.Common.Constant;
@@ -44,12 +43,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.hust.temp.R.id;
 import static com.hust.temp.R.layout;
 import static com.hust.temp.R.string;
+
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class ListHypothermiaFragment extends Fragment implements CustomDialogFilter.CustomDialogFilterListener {
     private ImageButton btnFilter;
@@ -57,9 +59,14 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
     private ArrayList<StudentInfo> listStudentInfoSource = new ArrayList<>();
     private TextView txtFilter;
     private ProgressDialog loading;
+    private Boolean isWarning;
 
-    public static ListHypothermiaFragment newInstance() {
-        return new ListHypothermiaFragment();
+    public ListHypothermiaFragment(boolean isWarning) {
+        this.isWarning =isWarning;
+    }
+
+    public static ListHypothermiaFragment newInstance(boolean isWarning) {
+        return new ListHypothermiaFragment(isWarning);
     }
 
     @Override
@@ -77,9 +84,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
 
         listStudentInfoSource = new ArrayList<>();
         setData(listStudentInfoSource);
-        GetListStudentInfo getListStudentInfo = new GetListStudentInfo();
-        getListStudentInfo.execute();
-
+        getListStudentInfo();
     }
 
     private void setData(ArrayList<StudentInfo> listStudentInfo) {
@@ -101,8 +106,11 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
                 setTypeForView(t3v, false);
                 tblRow.addView(t3v);
                 TextView t4v = new TextView(getContext());
-                t4v.setText(st.getHypothermia()+"");
+                t4v.setText(st.getHypothermia() + "");
                 setTypeForView(t4v, false);
+                if (isWarning){
+                    t4v.setTextColor(Color.RED);
+                }
                 tblRow.addView(t4v);
                 TextView t5v = new TextView(getContext());
                 t5v.setText(new SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).format(st.getLastUpdatedDate()));
@@ -189,7 +197,7 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         if (textDate != null && !textDate.trim().isEmpty()) {
             String startTimeString = textDate + " 00:00:00";
             String endTimeString = textDate + " 23:59:59";
-            SimpleDateFormat format = new SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT);
+            SimpleDateFormat format = new SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT);
             try {
                 Date startTime = format.parse(startTimeString);
                 Date endTime = format.parse(endTimeString);
@@ -222,81 +230,80 @@ public class ListHypothermiaFragment extends Fragment implements CustomDialogFil
         txtFilter.setText(textFilter);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    class GetListStudentInfo extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] params) {
-            RequestQueue queue = Volley.newRequestQueue(getContext().getApplicationContext());
-            StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                    Constant.ROOT_URL_SUB1, response -> {
-                        try {
-                            JSONObject jsonObj = new JSONObject(response);
-                            if (jsonObj != null) {
-                                JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
-                                for (int i = 0; i < jsonArrayRoom.length(); i++) {
-                                    JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
-                                    Date date;
-                                    double tempValue;
-                                    long id;
-                                    if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
-                                            "null")) {
-                                        date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
-                                    } else {
-                                        date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN,Locale.ROOT).parse(Constant.DATE_DEFAULT);
-                                    }
-                                    if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals(Constant.NULL_VALUE))) {
-                                        tempValue =
-                                                Double.parseDouble(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE));
-                                    } else {
-                                        tempValue = 0;
-                                    }
-                                    if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
-                                        id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
-                                    } else {
-                                        id = 0;
-                                    }
 
-                                    StudentInfo studentInfo = new StudentInfo(id,
-                                            obj.getString(Constant.KEY_STUDENT_NAME),
-                                            obj.getString(Constant.KEY_STUDENT_CLASS),
-                                            obj.getString(Constant.KEY_STUDENT_BIRTHDAY), tempValue,
-                                            date);
-                                    listStudentInfoSource.add(studentInfo);
-                                }
-                                setData(listStudentInfoSource);
-                                getActivity().getIntent().putExtra(Constant.KEY_LIST_HYPOTHERMIA,listStudentInfoSource);
-                            }
-                        } catch (JSONException | ParseException e) {
-                            Toast.makeText(getContext().getApplicationContext(),
-                                    getResources().getString(string.can_trans_data),
-                                    Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
+    private void getListStudentInfo() {
+        SharedPreferences mPreferences = getActivity().getSharedPreferences(Constant.SHARED_PROFILE, MODE_PRIVATE);
+        String role = mPreferences.getString(Constant.KEY_ROLE_SIGNED, Constant.FALSE);
 
-                    }, error -> Toast.makeText(getContext().getApplicationContext(),
-                            getResources().getString(string.server_error), Toast.LENGTH_LONG).show()
-            );
-            stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            stringRequest.setShouldCache(false);
-            queue.add(stringRequest);
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading = ProgressDialog.show(getActivity(),
-                    getResources().getString(R.string.loading_data),
-                    getResources().getString(R.string.waiting_minute), false, false);
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                Constant.ROOT_URL_SUB1, response -> {
             loading.dismiss();
-        }
+            try {
+                JSONObject jsonObj = new JSONObject(response);
+                JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
+                for (int i = 0; i < jsonArrayRoom.length(); i++) {
+                    JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
+                    Date date;
+                    double tempValue;
+                    long id;
+                    if (!obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE).equals(
+                            "null")) {
+                        date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).parse(obj.getString(Constant.KEY_HYPOTHERMIA_LAST_UPDATE));
+                    } else {
+                        date = new java.text.SimpleDateFormat(Constant.FORMAT_PARTEN, Locale.ROOT).parse(Constant.DATE_DEFAULT);
+                    }
+                    if (!(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE).equals(Constant.NULL_VALUE))) {
+                        tempValue =
+                                Double.parseDouble(obj.getString(Constant.KEY_HYPOTHERMIA_VALUE));
+                    } else {
+                        tempValue = 0;
+                    }
+                    if (!(obj.getString(Constant.KEY_STUDENT_ID).equals(Constant.NULL_VALUE))) {
+                        id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
+                    } else {
+                        id = 0;
+                    }
+
+                    StudentInfo studentInfo = new StudentInfo(id,
+                            obj.getString(Constant.KEY_STUDENT_NAME),
+                            obj.getString(Constant.KEY_STUDENT_CLASS),
+                            obj.getString(Constant.KEY_STUDENT_BIRTHDAY), tempValue,
+                            date);
+                    listStudentInfoSource.add(studentInfo);
+                }
+                if(isWarning){
+                    listStudentInfoSource = (ArrayList<StudentInfo>) listStudentInfoSource.stream()
+                            .filter(p -> p.getHypothermia() >= 37).collect(Collectors.toList());
+                }
+                setData(listStudentInfoSource);
+                getActivity().getIntent().putExtra(Constant.KEY_LIST_HYPOTHERMIA, listStudentInfoSource);
+            } catch (JSONException | ParseException e) {
+                loading.dismiss();
+                Toast.makeText(getContext().getApplicationContext(),
+                        getResources().getString(string.can_trans_data),
+                        Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+        }, error ->
+                Toast.makeText(getContext().getApplicationContext(),
+                        getResources().getString(string.server_error), Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(Constant.KEY_ROLE, role);
+                return params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setShouldCache(false);
+        queue.add(stringRequest);
+        loading = ProgressDialog.show(getActivity(),
+                getResources().getString(R.string.loading_data),
+                getResources().getString(R.string.waiting_minute), false, false);
     }
 }

@@ -19,7 +19,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Temp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Temp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColor">@color/black</item>
+    </style>
 
     <style name="Theme.Temp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

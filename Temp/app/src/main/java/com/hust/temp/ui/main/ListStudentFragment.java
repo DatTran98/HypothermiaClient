@@ -1,6 +1,9 @@
 package com.hust.temp.ui.main;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +39,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -74,7 +79,7 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
             for (Student st : listStudentInfo) {
                 TableRow tblRow = new TableRow(getContext());
                 TextView t0v = new TextView(getContext());
-                t0v.setText(String.format("%s",st.getStudentID()));
+                t0v.setText(String.format("%s", st.getStudentID()));
                 setTypeForView(t0v, true);
                 tblRow.addView(t0v);
                 TextView t1v = new TextView(getContext());
@@ -183,30 +188,30 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
     }
 
     private void getListStudent() {
+        SharedPreferences mPreferences = getActivity().getSharedPreferences(Constant.SHARED_PROFILE, MODE_PRIVATE);
+        String role = mPreferences.getString(Constant.KEY_ROLE_SIGNED, Constant.FALSE);
         loading = ProgressDialog.show(getActivity(),
                 getResources().getString(R.string.loading_data),
                 getResources().getString(R.string.waiting_minute), false, false);
-        RequestQueue queue = Volley.newRequestQueue(getContext().getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constant.ROOT_URL_SUB2, response -> {
 
             try {
                 JSONObject jsonObj = new JSONObject(response);
-                if (jsonObj != null) {
-                    JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
-                    for (int i = 0; i < jsonArrayRoom.length(); i++) {
-                        JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
-                        long id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
+                JSONArray jsonArrayRoom = jsonObj.getJSONArray(Constant.DATA_INFO);
+                for (int i = 0; i < jsonArrayRoom.length(); i++) {
+                    JSONObject obj = (JSONObject) jsonArrayRoom.get(i);
+                    long id = Long.parseLong(obj.getString(Constant.KEY_STUDENT_ID));
 
-                        Student student = new Student(id,
-                                obj.getString(Constant.KEY_STUDENT_NAME),
-                                obj.getString(Constant.KEY_STUDENT_CLASS),
-                                obj.getString(Constant.KEY_STUDENT_BIRTHDAY));
-                        listStudentInfoSource.add(student);
-                    }
-                    setData(listStudentInfoSource);
-                    loading.dismiss();
+                    Student student = new Student(id,
+                            obj.getString(Constant.KEY_STUDENT_NAME),
+                            obj.getString(Constant.KEY_STUDENT_CLASS),
+                            obj.getString(Constant.KEY_STUDENT_BIRTHDAY));
+                    listStudentInfoSource.add(student);
                 }
+                setData(listStudentInfoSource);
+                loading.dismiss();
             } catch (JSONException e) {
                 loading.dismiss();
                 Toast.makeText(getContext().getApplicationContext(),
@@ -218,7 +223,15 @@ public class ListStudentFragment extends Fragment implements CustomDialogFilter.
             loading.dismiss();
             Toast.makeText(getContext().getApplicationContext(),
                     getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
-        });
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(Constant.KEY_ROLE, role);
+                return params;
+            }
+        };
 
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

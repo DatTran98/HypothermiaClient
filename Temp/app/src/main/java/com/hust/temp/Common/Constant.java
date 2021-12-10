@@ -38,4 +38,14 @@ public class Constant {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String IS_LOGGED_IN = "isLoggedIn";
+    public static final String SUCCESS = "success";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_ID = "id";
+    public static final String KEY_ROLE = "role";
+    public static final String KEY_FULL_NAME = "full_name";
+    public static final String KEY_ID_SIGNED = "SignedInUserID";
+    public static final String KEY_FULL_NAME_SIGNED = "SignedInName";
+    public static final String KEY_USERNAME_SIGNED = "SignedInUsername";
+    public static final String KEY_ROLE_SIGNED = "SignedInUserRole";
+    public static final String SHARED_PROFILE = "registration_login";
 }

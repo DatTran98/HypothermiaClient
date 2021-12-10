@@ -3,18 +3,22 @@ package com.hust.temp;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -38,16 +42,19 @@ import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab, btnExport;
-    private TextView txtTitle;
     private final ArrayList<StudentInfo> listStudentInfoSource = new ArrayList<>();
     private Boolean exit = false;
     private ProgressDialog loading;
-
+    private Toolbar toolbar;
+    SharedPreferences.Editor preferencesEditor;
+    SharedPreferences mPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
                     getSupportFragmentManager());
         }
         findViewById();
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.temp_result);
+        }
+        toolbar.inflateMenu(R.menu.menu_main);
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
@@ -69,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        txtTitle.setText(R.string.temp_result);
+                        toolbar.setTitle(R.string.temp_result);
                         break;
                     case 1:
-                        txtTitle.setText(R.string.list_students);
+                        toolbar.setTitle(R.string.list_students);
                         break;
                     case 2:
-                        txtTitle.setText(R.string.pie_chart_title);
+                        toolbar.setTitle(R.string.pie_chart_title);
                         break;
                     default:
                         break;
@@ -103,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void findViewById() {
-        txtTitle = findViewById(R.id.title);
         fab = findViewById(R.id.fab);
         btnExport = findViewById(R.id.btn_export);
+        toolbar = findViewById(R.id.toolbar);
     }
 
     @Override
@@ -161,8 +173,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getListExport() {
+        SharedPreferences mPreferences = this.getSharedPreferences(Constant.SHARED_PROFILE, MODE_PRIVATE);
+        String role = mPreferences.getString(Constant.KEY_ROLE_SIGNED, Constant.FALSE);
         RequestQueue queue = Volley.newRequestQueue(this.getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
                 Constant.ROOT_URL_SUB1, response -> {
             try {
                 JSONObject jsonObj = new JSONObject(response);
@@ -213,8 +227,14 @@ public class MainActivity extends AppCompatActivity {
             loading.dismiss();
             Toast.makeText(MainActivity.this,
                     getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
-        }
-        );
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put(Constant.KEY_ROLE, role);
+                return params;
+            }
+        };
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(50000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -229,9 +249,36 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
-            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 exportCSV();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        mPreferences = getSharedPreferences(Constant.SHARED_PROFILE, MODE_PRIVATE);
+        preferencesEditor = mPreferences.edit();
+        preferencesEditor.putString(Constant.IS_LOGGED_IN, Constant.FALSE);
+        preferencesEditor.apply();
+        Intent loginScreen = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(loginScreen);
+        finish();
     }
 }

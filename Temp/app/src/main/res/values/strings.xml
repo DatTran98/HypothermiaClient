@@ -57,6 +57,9 @@
     <string name="view_student_not_yes">Danh sách học sinh chưa đo</string>
     <string name="see_chart">Xem biểu đồ</string>
     <string name="welcome_to_hypothermia">Welcom to \nHyphothermia app</string>
-    <string name="login">Login</string>
-    <string name="new_user_register_now">New user? Contact to admintrator</string>
+    <string name="login">Đăng nhập</string>
+    <string name="new_user_register_now">Người dùng mới? \nHãy liên hệ admin</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="no_valid_user">Người dùng không tồn tại</string>
+    <string name="warning">Cảnh báo</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.hust.temp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,13 +25,14 @@ import java.util.Map;
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
 public class LoginActivity extends AppCompatActivity {
-    SharedPreferences.Editor preferencesEditor;
-    EditText username, password;
-    CircularProgressButton btnLogin;
-    String usernameLogin, passLogin;
-    SharedPreferences mPreferences;
-    String sharedprofFile="com.protocoderspoint.registration_login";
-    String is_signed_in="";
+    private SharedPreferences.Editor preferencesEditor;
+    private EditText username, password;
+    private CircularProgressButton btnLogin;
+    private String usernameLogin, passLogin;
+    private SharedPreferences mPreferences;
+    private String isSignedIn = "";
+    private ProgressDialog loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_login);
 
-        mPreferences=getSharedPreferences(sharedprofFile,MODE_PRIVATE);
+        mPreferences = getSharedPreferences(Constant.SHARED_PROFILE, MODE_PRIVATE);
         preferencesEditor = mPreferences.edit();
-        is_signed_in = mPreferences.getString(Constant.IS_LOGGED_IN,Constant.FALSE);
-        if(is_signed_in.equals(Constant.TRUE))
-        {
-            Intent i = new Intent(LoginActivity.this,MainActivity.class);
+        isSignedIn = mPreferences.getString(Constant.IS_LOGGED_IN, Constant.FALSE);
+        if (isSignedIn.equals(Constant.TRUE)) {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
             finish();
         }
@@ -66,46 +67,46 @@ public class LoginActivity extends AppCompatActivity {
     private void findViewByIdForWidget() {
         username = findViewById(R.id.editTextUsername);
         password = findViewById(R.id.editTextPassword);
-        btnLogin = (CircularProgressButton) findViewById(R.id.cirLoginButton);
+        btnLogin = findViewById(R.id.cirLoginButton);
     }
 
     private void login() {
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, Constant.ROOT_URL_LOGIN,
                 response -> {
                     Log.w("anyText", response);
+                    loading.dismiss();
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        String success = jsonObject.getString("success");
-                        String message = jsonObject.getString("message");
+                        String success = jsonObject.getString(Constant.SUCCESS);
 
                         if (success.equals("1")) {
-                            String id = jsonObject.getString("id");
-                            String name = jsonObject.getString("full_name");
-                            String username = jsonObject.getString("username");
-                            String role = jsonObject.getString("role");
-                            Toast.makeText(getApplicationContext(), "Logged In  Success", Toast.LENGTH_LONG).show();
-                            preferencesEditor.putString(Constant.IS_LOGGED_IN, "true");
-                            preferencesEditor.putString("SignedInUserID", id);
-                            preferencesEditor.putString("SignedInName", name);
-                            preferencesEditor.putString("SignedInUsername", username);
-                            preferencesEditor.putString("SignedInUserRole", role);
+                            String id = jsonObject.getString(Constant.KEY_ID);
+                            String name = jsonObject.getString(Constant.KEY_FULL_NAME);
+                            String username = jsonObject.getString(Constant.KEY_USERNAME);
+                            String role = jsonObject.getString(Constant.KEY_ROLE);
+                            preferencesEditor.putString(Constant.IS_LOGGED_IN, Constant.TRUE);
+                            preferencesEditor.putString(Constant.KEY_ID_SIGNED, id);
+                            preferencesEditor.putString(Constant.KEY_FULL_NAME_SIGNED, name);
+                            preferencesEditor.putString(Constant.KEY_USERNAME_SIGNED, username);
+                            preferencesEditor.putString(Constant.KEY_ROLE_SIGNED, role);
                             preferencesEditor.apply();
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(i);
                             finish();
                         }
                         if (success.equals("0")) {
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//                                pdDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_valid_user), Toast.LENGTH_LONG).show();
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Toast.makeText(getApplicationContext(), "Login Error !1" + e, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this,
+                                getResources().getString(R.string.can_trans_data),
+                                Toast.LENGTH_SHORT).show();
                     }
                 }, error -> {
-//                    pdDialog.dismiss();
-            Toast.makeText(getApplicationContext(), "Login Error !2" + error, Toast.LENGTH_LONG).show();
+            loading.dismiss();
+            Toast.makeText(this, getResources().getString(R.string.server_error) + error, Toast.LENGTH_LONG).show();
         }) {
             @Override
             protected Map<String, String> getParams() {
@@ -117,5 +118,8 @@ public class LoginActivity extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+        loading = ProgressDialog.show(this,
+                "",
+                getResources().getString(R.string.login), false, false);
     }
 }

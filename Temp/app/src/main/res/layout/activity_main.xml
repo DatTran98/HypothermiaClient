@@ -12,16 +12,12 @@
         android:layout_height="wrap_content"
         android:theme="@style/Theme.Temp.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:gravity="center"
-            android:minHeight="?actionBarSize"
-            android:padding="@dimen/appbar_padding"
-            android:text="@string/temp_result"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+       <androidx.appcompat.widget.Toolbar
+           android:id="@+id/toolbar"
+           android:layout_width="match_parent"
+           android:layout_height="?attr/actionBarSize"
+           android:minHeight="?actionBarSize"
+           app:layout_scrollFlags="scroll|enterAlways"/>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

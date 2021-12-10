@@ -3,6 +3,7 @@ package com.hust.temp;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -36,11 +37,20 @@ public class AddStudentActivity extends AppCompatActivity {
     private ImageButton btnPickDate;
     private MaterialTextView message;
     private ProgressDialog loading;
-
+    SharedPreferences.Editor preferencesEditor;
+    SharedPreferences mPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_student);
+        mPreferences = getSharedPreferences(Constant.SHARED_PROFILE, MODE_PRIVATE);
+        preferencesEditor = mPreferences.edit();
+        String isSignedIn = mPreferences.getString(Constant.IS_LOGGED_IN, Constant.FALSE);
+        if (isSignedIn.equals(Constant.FALSE)) {
+            Intent i = new Intent(AddStudentActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
         findViewById();
         setEvent();
     }
